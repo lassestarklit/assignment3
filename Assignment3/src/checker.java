@@ -55,19 +55,18 @@ class checkerBoard{
 		
 		}
 	}
-
-
-}
-
-class changeboard extends checkerBoard{
-
-	public changeboard(int x, int y, String[][] checker) {
-		checker[y][x]=" ";
-		 
+	public void changeboard(int x, int y, String[][] checker) {
+		this.checker[y][x]=" ";
+		 printBoard();
 	}
-	
-	
+
+
 }
+
+
+	
+	
+
 
 
 public class checker {
@@ -76,22 +75,30 @@ public class checker {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		
-		for (;;) {
+		/*
+		for(;;) {
 			System.out.print("Enter X: ");
 			int x = s.nextInt();
-
 			System.out.print("Enter Y: ");
 			int y = s.nextInt();
 			Position p = new Position(x,y);
-			//p.isEmpty(1, 0, checkerBoard.class)
-			
-			
+				//p.isEmpty(1, 0, checkerBoard.class)
+				
+				
 			checkerBoard board = new checkerBoard();
+				
+			board.changeboard(p.x, p.y, null);
 			board.printBoard();
-			checkerBoard change = new changeboard(x, y, board.checker);
-			
-			//board.printBoard(new checkerBoard());
-		}
+				
+				
+		
+		}*/
+		
+		checkerBoard board = new checkerBoard();
+		
+		board.changeboard(1* 2 + 2, 0+2, null);
+		board.changeboard(3* 2 + 2, 0+2, null);
+		board.changeboard(5* 2 + 2, 0+2, null);
 		
 	}
 
