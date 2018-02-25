@@ -5,24 +5,31 @@ import java.util.Scanner;
 class Position{
 	int x;
 	int y;
-	
-	public Position(int x,int y) {
+	/*
+	public static void onBoard(int x,int y) throws onBoard {
+	if (!(x >= 0 && x <= 7 && y >= 0 && y <= 7)) {
+		throw new onBoard();
+	} else {}}
+	*/
+	public Position(int x,int y) throws onBoard {
+		if (!(x >= 0 && x <= 7 && y >= 0 && y <= 7)) {
+			throw new onBoard();
+		}else {
 		this.x=x * 2 + 2;
 		this.y=y+ 2;
-		
-		
+		}
 	}
+	
+	
 }
-/*
+
 @SuppressWarnings("serial")
-class isempty extends Exception {
-	public isempty() {};
+class onBoard extends Exception {
+	public onBoard() {System.err.println("The position is not on the board");};
 		
-	public isempty(String message) {
-		super(message);
-	}
+	
 }
-*/
+
 class Player{
 	public String Player;
 	public void getPlayer(String Player) {
@@ -39,11 +46,12 @@ class PositionChecker extends  checkerBoard{
 	}
 
 	public boolean isOnBoard() {
+		System.out.print(x + " " + y);
 		return (x >= 0 && x <= 7 && y >= 0 && y <= 7);
 	}
 	
 	public boolean isEmpty() {
-		return (checkerBoard.checker[y][x]=="1");
+		return (!(checkerBoard.checker[y][x]=="1"));
 	}
 
 	
@@ -79,15 +87,14 @@ class checkerBoard{
 		}
 	}
 	public void changeboard(int x, int y, String[][] checker) {
-			if (!(checker[y][x]=="1")) {
-				System.err.println("You have no piece in this position");
-			}else {
-				checkerBoard.checker[y][x]=" ";
-				printBoard();
-				PositionChecker p= new PositionChecker(x,y);
-				p.isEmpty();
-				
-			}
+			PositionChecker p= new PositionChecker(x,y);
+			
+			
+			if(!(p.isEmpty())) {
+					checkerBoard.checker[y][x]=" ";
+					printBoard();
+			}else {System.err.println("You have no piece in this position");}
+			
 
 
 	}
@@ -112,24 +119,21 @@ public class checker {
 			int x = s.nextInt();
 			System.out.print("Enter Y: ");
 			int y = s.nextInt();
+			checkerBoard board = new checkerBoard();
 			
-			Position p = new Position(x,y);
-		
+			Position p = null;
+			try {
+				p = new Position(x,y);
+				board.changeboard(p.x, p.y, checkerBoard.checker);
+			} catch (onBoard e) {
+				
+			}
+			
+			
+			
 	
 			
 					
-					
-			checkerBoard board = new checkerBoard();
-					
-			board.changeboard(p.x, p.y, checkerBoard.checker);
-			
-			System.out.print("Enter X: ");
-			int xx = s.nextInt();
-			System.out.print("Enter Y: ");
-			int yy = s.nextInt();
-			Position p1 = new Position(xx,yy);	
-
-			board.changeboard(p1.x, p1.y, checkerBoard.checker);
 
 		
 		
