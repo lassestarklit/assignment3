@@ -35,14 +35,15 @@ class isEmpty extends Exception {
 
 class Player{
 	public String Player;
+
 	public void changePlayer(String Player) {
 		this.Player=Player;
 		
+		
 	}
-	public void printPlayer() {
-		System.out.println(Player);
-		
-		
+	
+	public String getPlayer() {
+		return Player;
 	}
 	
 	public void ran() {
@@ -52,6 +53,9 @@ class Player{
 		if (ran<=1) Player="1";
 		else  Player="2";
 		changePlayer(Player);
+		System.out.println("Player " + Player + " starts!");
+		
+		
 		
 	}
 	public void changePlayer() {
@@ -95,10 +99,12 @@ class checkerBoard{
 		
 		}
 	}
-	public boolean changeboard(int x, int y, String[][] checker) throws isEmpty {
+	public boolean changeboard(int x, int y, String[][] checker,String Player) throws isEmpty {
 		
+	
 		
-		if (!(checker[y][x]=="1")) {
+		if (!(checker[y][x]==Player)) {
+			
 			throw new isEmpty();
 		}else {
 			checkerBoard.checker[y][x]=" ";
@@ -126,12 +132,19 @@ public class checker {
 		Scanner s = new Scanner(System.in);
 		Player player =new Player ();
 		player.ran();
-		player.printPlayer();
+		checkerBoard board = new checkerBoard();
+		Position p = null;
+	
 		
 		
 		
 		for(;;) {
 			boolean bool=true;
+			board.printBoard();
+			//prints output to game play
+			System.out.println("\nTurn of player no. " + player.getPlayer());
+			System.out.println("Coordinate of piece to move");
+			
 			while (bool)
 			try {
 			System.out.print("Enter X: ");
@@ -140,12 +153,12 @@ public class checker {
 			int y = s.nextInt();
 			
 			
-			checkerBoard board = new checkerBoard();
 			
-			Position p = null;
+			
+			
 			
 			p = new Position(x,y);
-			bool=board.changeboard(p.x, p.y, checkerBoard.checker);
+			bool=board.changeboard(p.x, p.y, checkerBoard.checker,player.getPlayer());
 			} catch (onBoard e) {
 				
 			} catch (isEmpty ie) {
@@ -156,7 +169,9 @@ public class checker {
 				
 			}
 			player.changePlayer();
-			player.printPlayer();
+			
+			
+		
 		}
 		
 		
