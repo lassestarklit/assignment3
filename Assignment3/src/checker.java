@@ -17,6 +17,7 @@ class Position{
 		}else {
 		this.x=x * 2 + 2;
 		this.y=y+ 2;
+		
 		}
 	}
 	
@@ -25,7 +26,13 @@ class Position{
 
 @SuppressWarnings("serial")
 class onBoard extends Exception {
-	public onBoard() {System.err.println("The position is not on the board");};
+	public onBoard() {System.err.println("The position is not on the board\n");};
+		
+	
+}
+@SuppressWarnings("serial")
+class isEmpty extends Exception {
+	public isEmpty() {System.err.println("There is no piece of yours in that position\n");};
 		
 	
 }
@@ -37,6 +44,7 @@ class Player{
 		
 	}
 }
+/*
 class PositionChecker extends  checkerBoard{
 	private int x,y;
 	public PositionChecker(int x, int y) {
@@ -56,6 +64,7 @@ class PositionChecker extends  checkerBoard{
 
 	
 }
+*/
 class checkerBoard{
 	
 	public static String[][] checker = { { " ", "  0 ", " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", "<- X axis" },
@@ -86,17 +95,25 @@ class checkerBoard{
 		
 		}
 	}
-	public void changeboard(int x, int y, String[][] checker) {
+	public void changeboard(int x, int y, String[][] checker) throws isEmpty {
+		/*
 			PositionChecker p= new PositionChecker(x,y);
 			
 			
 			if(!(p.isEmpty())) {
-					checkerBoard.checker[y][x]=" ";
-					printBoard();
+					
 			}else {System.err.println("You have no piece in this position");}
 			
 
 
+	}*/
+		if (!(checker[y][x]=="1")) {
+			throw new isEmpty();
+		}else {
+			checkerBoard.checker[y][x]=" ";
+			printBoard();
+		
+		}
 	}
 }
 
@@ -127,7 +144,7 @@ public class checker {
 				board.changeboard(p.x, p.y, checkerBoard.checker);
 			} catch (onBoard e) {
 				
-			}
+			} catch (isEmpty ie) {}
 			
 			
 			
