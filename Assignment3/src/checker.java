@@ -1,16 +1,12 @@
 
 //import the module scanner
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 class Position{
 	int x;
 	int y;
-	/*
-	public static void onBoard(int x,int y) throws onBoard {
-	if (!(x >= 0 && x <= 7 && y >= 0 && y <= 7)) {
-		throw new onBoard();
-	} else {}}
-	*/
+	
 	public Position(int x,int y) throws onBoard {
 		if (!(x >= 0 && x <= 7 && y >= 0 && y <= 7)) {
 			throw new onBoard();
@@ -26,45 +22,49 @@ class Position{
 
 @SuppressWarnings("serial")
 class onBoard extends Exception {
-	public onBoard() {System.err.println("The position is not on the board\n");};
+	public onBoard() {System.err.println("The position is not on the board. Please try again\n");};
 		
 	
 }
 @SuppressWarnings("serial")
 class isEmpty extends Exception {
-	public isEmpty() {System.err.println("There is no piece of yours in that position\n");};
+	public isEmpty() {System.err.println("There is no piece of yours in that position. Please try again\n");};
 		
 	
 }
 
 class Player{
 	public String Player;
-	public void getPlayer(String Player) {
+	public void changePlayer(String Player) {
 		this.Player=Player;
 		
 	}
-}
-/*
-class PositionChecker extends  checkerBoard{
-	private int x,y;
-	public PositionChecker(int x, int y) {
+	public void printPlayer() {
+		System.out.println(Player);
 		
-		this.x=x;
-		this.y = y;
-	}
-
-	public boolean isOnBoard() {
-		System.out.print(x + " " + y);
-		return (x >= 0 && x <= 7 && y >= 0 && y <= 7);
+		
 	}
 	
-	public boolean isEmpty() {
-		return (!(checkerBoard.checker[y][x]=="1"));
+	public void ran() {
+		double ran= Math.random();
+		ran*=2;
+		String Player;
+		if (ran<=1) Player="1";
+		else  Player="2";
+		changePlayer(Player);
+		
 	}
-
+	public void changePlayer() {
+		if (Player=="1") {
+			Player="2";
+		} else {
+			Player="1";
+		}
+		changePlayer(Player);
+		
+	}
 	
 }
-*/
 class checkerBoard{
 	
 	public static String[][] checker = { { " ", "  0 ", " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", "<- X axis" },
@@ -95,25 +95,19 @@ class checkerBoard{
 		
 		}
 	}
-	public void changeboard(int x, int y, String[][] checker) throws isEmpty {
-		/*
-			PositionChecker p= new PositionChecker(x,y);
-			
-			
-			if(!(p.isEmpty())) {
-					
-			}else {System.err.println("You have no piece in this position");}
-			
-
-
-	}*/
+	public boolean changeboard(int x, int y, String[][] checker) throws isEmpty {
+		
+		
 		if (!(checker[y][x]=="1")) {
 			throw new isEmpty();
 		}else {
 			checkerBoard.checker[y][x]=" ";
 			printBoard();
+			return false;
+			
 		
 		}
+		
 	}
 }
 
@@ -127,33 +121,42 @@ public class checker {
 
 
 	public static void main(String[] args) {
+		
 		@SuppressWarnings("resource")
 		Scanner s = new Scanner(System.in);
+		Player player =new Player ();
+		player.ran();
+		player.printPlayer();
+		
 		
 		
 		for(;;) {
+			boolean bool=true;
+			while (bool)
+			try {
 			System.out.print("Enter X: ");
 			int x = s.nextInt();
 			System.out.print("Enter Y: ");
 			int y = s.nextInt();
+			
+			
 			checkerBoard board = new checkerBoard();
 			
 			Position p = null;
-			try {
-				p = new Position(x,y);
-				board.changeboard(p.x, p.y, checkerBoard.checker);
+			
+			p = new Position(x,y);
+			bool=board.changeboard(p.x, p.y, checkerBoard.checker);
 			} catch (onBoard e) {
 				
-			} catch (isEmpty ie) {}
-			
-			
-			
-	
-			
-					
-
-		
-		
+			} catch (isEmpty ie) {
+				
+			}catch (InputMismatchException inp) {
+				System.out.println("Error! Invalid input");
+		         s.next();
+				
+			}
+			player.changePlayer();
+			player.printPlayer();
 		}
 		
 		
