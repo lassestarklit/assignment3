@@ -77,11 +77,11 @@ class Player{
 	}
 	public void changePlayer() {
 		if (Player=="1") {
-			Player="2";
+			changePlayer("2");
 		} else {
-			Player="1";
+			changePlayer("1");
 		}
-		changePlayer(Player);
+		
 		
 	}
 	
@@ -116,19 +116,22 @@ class checkerBoard{
 		
 		}
 	}
-	public boolean currentPosition(int x, int y, String[][] checker,String Player) throws isEmpty {
-		
+	public void movepiece(int x, int y, String Player) {
+		checkerBoard.checker[y][x]=Player;
+	}
+	public void clearposition(int x, int y) {
+		checkerBoard.checker[y][x]=" ";
+	}
 	
-		
+	public boolean currentPosition(int x, int y, String[][] checker,String Player) throws isEmpty {
+
 		if (!(checker[y][x]==Player)) {
 			
 			throw new isEmpty();
 		}else {
-			checkerBoard.checker[y][x]=" ";
+			clearposition(x, y);
 			return false;
-			
-			
-		
+
 		}
 		
 		
@@ -150,7 +153,7 @@ class checkerBoard{
 						//move the brick 1 to the left or right
 							case (1) :
 								if ((x-ox)/2==-1 || (x-ox)/2==1) {
-									checkerBoard.checker[y][x]="1";
+									movepiece(x,y,Player);
 									bool=false;
 									break;
 								
@@ -162,14 +165,16 @@ class checkerBoard{
 						//and if there it it removes the brick. If not, the move will be illegal.
 								
 								if ((x-ox)/2==-2  && checker[oy+1][ox-2]=="2" ) {
-									checkerBoard.checker[y][x]="1"; 
-									checkerBoard.checker[oy+1][ox-2]=" "; 
+									movepiece(x,y,Player); 
+									clearposition(ox-2, oy+1);
+									 
 									System.out.println("Opponent's brick removed from table");
 									bool=false;
 									break;
 								} else if ((x-ox)/2==2  && checker[oy+1][ox+2]=="2" ) {
-									checkerBoard.checker[y][x]="1"; 
-									checkerBoard.checker[oy+1][ox+2]=" "; 
+									movepiece(x,y,Player);
+									clearposition(ox+2, oy+1);
+									 
 									System.out.println("Opponent's brick removed from table");
 									bool=false;
 									break;
@@ -187,26 +192,26 @@ class checkerBoard{
 							switch(y-oy) {
 							case (-1) :
 								if ((x-ox)/2==-1 || (x-ox)/2==1) {
-									checkerBoard.checker[y][x]="2";
+									movepiece(x,y,Player);
 									bool=false;
 									break;
 									
 								}
-								
-								
-								
+
 							case (-2):
 							
 								if ((x-ox)/2==-2  && checker[oy-1][ox-2]=="1") {
-									checkerBoard.checker[y][x]="2";
-									checkerBoard.checker[oy-1][ox-2]=" "; 
+									movepiece(x,y,Player);
+									clearposition(ox-2, oy-1);
+								
 									System.out.println("Opponent's brick removed from table");
 									bool=false;
 									break;
 									
 								} else if ((x-ox)/2==2  && checker[oy-1][ox+2]=="1") {
-									checkerBoard.checker[y][x]="2";
-									checkerBoard.checker[oy-1][ox+2]=" "; 
+									movepiece(x,y,Player);
+									clearposition(ox+2, oy-1);
+									
 									System.out.println("Opponent's brick removed from table");
 									bool=false;
 									break;
@@ -238,14 +243,12 @@ public class checker {
 		player.ran();
 		checkerBoard board = new checkerBoard();
 		Position p = null;
-	
-		
-		
+
 		
 		for(;;) {
 			boolean bool=true;
 			board.printBoard();
-			//prints output to game play
+			
 			System.out.println("\nTurn of player no. " + player.getPlayer());
 			System.out.println("Coordinate of piece to move");
 			
@@ -286,14 +289,9 @@ public class checker {
 					int nx = s.nextInt();
 					System.out.print("Enter new Y: ");
 					int ny = s.nextInt();
-					
-					
-					
-					
-					
+
 					p = new Position(nx,ny);
-					
-					
+
 					bool=board.newPosition(p.x, p.y,oldx,oldy, checkerBoard.checker,player.getPlayer());
 					
 					} catch (onBoard e) {
@@ -310,8 +308,7 @@ public class checker {
 			}
 			System.out.println("Piece moved! \n");
 			player.changePlayer();
-			
-		
+
 		}
 		
 		
