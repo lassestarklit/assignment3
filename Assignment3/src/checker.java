@@ -1,12 +1,17 @@
 
-//import the module scanner
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+//Class that holds the position on the board
 class Position{
 	int x,y;
 	
-	
+/*the constructor position  with  a coordinate as input.
+It checks if user's desired position is on the board. 
+If it isn't the self made exception onBoard is thrown.
+If it is the position will get adjusted to the board.
+*/
 	public Position(int x,int y) throws onBoard {
 		if (!(x >= 0 && x <= 7 && y >= 0 && y <= 7)) {
 			throw new onBoard();
@@ -24,7 +29,7 @@ class Position{
 	
 	
 }
-
+//self made exceptions. 
 @SuppressWarnings("serial")
 class onBoard extends Exception {
 	public onBoard() {System.err.println("The position is not on the board. Please try again\n");};
@@ -50,10 +55,11 @@ class illegalMove extends Exception {
 	
 }
 
+//Player class determines, whose turn it is, changes the turn etc.
 class Player{
 	public String Player;
 
-	public void changePlayer(String Player) {
+	public void currentPlayer(String Player) {
 		this.Player=Player;
 		
 		
@@ -63,31 +69,33 @@ class Player{
 		return Player;
 	}
 	
+//Generates random outcome to choose player to start in the beginning
 	public void ran() {
 		double ran= Math.random();
 		ran*=2;
 		String Player;
 		if (ran<=1) Player="1";
 		else  Player="2";
-		changePlayer(Player);
+		currentPlayer(Player);
 		System.out.println("Player " + Player + " starts!");
 		
 		
-		
+//Method to change player		
 	}
 	public void changePlayer() {
 		if (Player=="1") {
-			changePlayer("2");
+			currentPlayer("2");
 		} else {
-			changePlayer("1");
+			currentPlayer("1");
 		}
 		
 		
 	}
 	
 }
+//Class to define checkboard, moves etc.
 class checkerBoard{
-	
+	//Create checker board as matrix	
 	public static String[][] checker = { { " ", "  0 ", " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", "<- X axis" },
 			{ " ", "+", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "+" },
 			{ "0", "|", " ", " ", "1", " ", " ", " ", "1", " ", " ", " ", "1", " ", " ", " ", "1", " ", "|" },
@@ -104,7 +112,8 @@ class checkerBoard{
 	
 
 
-
+//method to print board. Uses two nested for loops, which will print the checker board. 
+//Each column (j) at a time.
 	public void printBoard() {
 		for (int i = 0; i < checker.length; i++) {
 			for (int j = 0; j < checker[i].length; j++) {
@@ -116,111 +125,113 @@ class checkerBoard{
 		
 		}
 	}
-	public void movepiece(int x, int y, String Player) {
+//Method to move piece. 
+	public void movepPiece(int x, int y, String Player) {
 		checkerBoard.checker[y][x]=Player;
 	}
-	public void clearposition(int x, int y) {
+//Method to clear position when moved
+	public void clearPosition(int x, int y) {
 		checkerBoard.checker[y][x]=" ";
 	}
-	
+//Method to check the user input. If it indeed is a current position
+//current position, it will clear the position to be ready move to new position
+//And return false in order to get out of the first while loop in main
 	public boolean currentPosition(int x, int y, String[][] checker,String Player) throws isEmpty {
 
 		if (!(checker[y][x]==Player)) {
-			
 			throw new isEmpty();
 		}else {
-			clearposition(x, y);
+			clearPosition(x, y);
 			return false;
-
-		}
-		
-		
+		}	
 	}
-		public boolean newPosition(int x, int y,int ox,int oy, String[][] checker,String Player) throws notEmpty,illegalMove {
-			
-		
-			
-			boolean bool = true;
-			if (!(checker[y][x]==" ")) {
-				
-				throw new notEmpty();
-			}else {
-				if (Player=="1") {
-					//switch operator, checking how many fields player 1 wants to move its' brick. 
-						switch(y-oy) {
-						
-						//if the player only moves the brick one field in the vertical direction, the only possible move is to either 
-						//move the brick 1 to the left or right
-							case (1) :
-								if ((x-ox)/2==-1 || (x-ox)/2==1) {
-									movepiece(x,y,Player);
-									bool=false;
-									break;
-								
-								}
-								
-							case (2):
-						//if the player moves the brick two fields in the vertical direction, there are 2 possible scenarios which are
-						//to move the brick 2 to the left or right. It checks whether there is an opponent's brick in between.
-						//and if there it it removes the brick. If not, the move will be illegal.
-								
-								if ((x-ox)/2==-2  && checker[oy+1][ox-2]=="2" ) {
-									movepiece(x,y,Player); 
-									clearposition(ox-2, oy+1);
-									 
-									System.out.println("Opponent's brick removed from table");
-									bool=false;
-									break;
-								} else if ((x-ox)/2==2  && checker[oy+1][ox+2]=="2" ) {
-									movepiece(x,y,Player);
-									clearposition(ox+2, oy+1);
-									 
-									System.out.println("Opponent's brick removed from table");
-									bool=false;
-									break;
-									
-									
-								}
-							
-							default:throw new illegalMove();
+//Method to check if the desired new position is a legal move
+	public boolean newPosition(int x, int y, int ox, int oy, String[][] checker, String Player)
+			throws notEmpty, illegalMove {
 
-							
-						}
+		boolean bool = true;
+		if (!(checker[y][x] == " ")) {
+
+			throw new notEmpty();
+		} else {
+			if (Player == "1") {
+				// switch operator, checking how many fields player 1 wants to move its' brick.
+				switch (y - oy) {
+
+				// if the player only moves the brick one field in the vertical direction, the
+				// only possible move is to either
+				// move the brick 1 to the left or right
+				case (1):
+					if ((x - ox) / 2 == -1 || (x - ox) / 2 == 1) {
+						movepPiece(x, y, Player);
+						bool = false;
+						break;
+
+					}
+
+				case (2):
+					// if the player moves the brick two fields in the vertical direction, there are
+					// 2 possible scenarios which are
+					// to move the brick 2 to the left or right. It checks whether there is an
+					// opponent's brick in between.
+					// and if there it it removes the brick. If not, the move will be illegal.
+
+					if ((x - ox) / 2 == -2 && checker[oy + 1][ox - 2] == "2") {
+						movepPiece(x, y, Player);
+						clearPosition(ox - 2, oy + 1);
+
+						System.out.println("Opponent's brick removed from table");
+						bool = false;
+						break;
+					} else if ((x - ox) / 2 == 2 && checker[oy + 1][ox + 2] == "2") {
+						movepPiece(x, y, Player);
+						clearPosition(ox + 2, oy + 1);
+
+						System.out.println("Opponent's brick removed from table");
+						bool = false;
+						break;
+
+					}
+//If none of the cases are true, the exception illegalMove will get thrown. 
+				default: throw new illegalMove();
+
 				}
-						//Same principal for player 2
-						if (Player=="2") {
-							switch(y-oy) {
-							case (-1) :
-								if ((x-ox)/2==-1 || (x-ox)/2==1) {
-									movepiece(x,y,Player);
-									bool=false;
-									break;
-									
-								}
-
-							case (-2):
-							
-								if ((x-ox)/2==-2  && checker[oy-1][ox-2]=="1") {
-									movepiece(x,y,Player);
-									clearposition(ox-2, oy-1);
-								
-									System.out.println("Opponent's brick removed from table");
-									bool=false;
-									break;
-									
-								} else if ((x-ox)/2==2  && checker[oy-1][ox+2]=="1") {
-									movepiece(x,y,Player);
-									clearposition(ox+2, oy-1);
-									
-									System.out.println("Opponent's brick removed from table");
-									bool=false;
-									break;
-									
-								}
-							default:throw new illegalMove();
-							}
-						}
 			}
+			// Same principal for player 2
+			if (Player == "2") {
+				switch (y - oy) {
+				case (-1):
+					if ((x - ox) / 2 == -1 || (x - ox) / 2 == 1) {
+						movepPiece(x, y, Player);
+						bool = false;
+						break;
+
+					}
+
+				case (-2):
+
+					if ((x - ox) / 2 == -2 && checker[oy - 1][ox - 2] == "1") {
+						movepPiece(x, y, Player);
+						clearPosition(ox - 2, oy - 1);
+
+						System.out.println("Opponent's brick removed from table");
+						bool = false;
+						break;
+
+					} else if ((x - ox) / 2 == 2 && checker[oy - 1][ox + 2] == "1") {
+						movepPiece(x, y, Player);
+						clearPosition(ox + 2, oy - 1);
+
+						System.out.println("Opponent's brick removed from table");
+						bool = false;
+						break;
+
+					}
+				default:
+					throw new illegalMove();
+				}
+			}
+		}
 			return bool;
 		
 	}
@@ -236,12 +247,16 @@ public class checker {
 
 
 	public static void main(String[] args) {
-		
+
+//Calls different classes
 		@SuppressWarnings("resource")
 		Scanner s = new Scanner(System.in);
 		Player player =new Player ();
+//Randomly selects a player to start using the method ran in the class Player
 		player.ran();
 		checkerBoard board = new checkerBoard();
+//Creates the static type p from class Position , and let dynamic type =null. 
+//Used later for user input.
 		Position p = null;
 
 		
@@ -251,19 +266,15 @@ public class checker {
 			
 			System.out.println("\nTurn of player no. " + player.getPlayer());
 			System.out.println("Coordinate of piece to move");
-			
+//prompts player for input, and uses a try/catch to determine if an exception is met. If something is wrong
+//with the input, the while loop will start over. If not, the constructor in Position will create the 
+//user input as coordinates and then use it in the method currentPosition, in the checkerBoard class		
 			while (bool) {
 				try {
 				System.out.print("Enter X: ");
 				int x = s.nextInt();
 				System.out.print("Enter Y: ");
 				int y = s.nextInt();
-				
-				
-				
-				
-				
-				
 				p = new Position(x,y);
 				bool=board.currentPosition(p.x, p.y, checkerBoard.checker,player.getPlayer());
 				
@@ -278,9 +289,11 @@ public class checker {
 				}
 			} 
 			bool=true;
+//Defining the coordinates which are now "old" 
 			int oldx=p.x;
 			int oldy=p.y;
 			System.out.println("\nCoordinate of new position");
+//Same principle as first while loop
 			while (bool) {
 				
 				try {
@@ -307,6 +320,7 @@ public class checker {
 					} 
 			}
 			System.out.println("Piece moved! \n");
+//Changes player using the method in the class Player
 			player.changePlayer();
 
 		}
