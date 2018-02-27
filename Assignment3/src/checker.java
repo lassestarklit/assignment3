@@ -2,7 +2,31 @@
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
+//self made exceptions. 
+@SuppressWarnings("serial")
+class onBoard extends Exception {
+	public onBoard() {System.err.println("The position is not on the board. Please try again\n");};
+		
+	
+}
+@SuppressWarnings("serial")
+class isEmpty extends Exception {
+	public isEmpty() {System.err.println("There is no piece of yours in that position. Please try again\n");};
+		
+	
+}
+@SuppressWarnings("serial")
+class notEmpty extends Exception {
+	public notEmpty() {System.err.println("The position is already occupied. Please try again\n");};
+		
+	
+}
+@SuppressWarnings("serial")
+class illegalMove extends Exception {
+	public illegalMove() {System.err.println("The move is not allowed! Please try again\n");};
+		
+	
+}
 //Class that holds the position on the board
 class Position{
 	int x,y;
@@ -29,42 +53,18 @@ If it is the position will get adjusted to the board.
 	
 	
 }
-//self made exceptions. 
-@SuppressWarnings("serial")
-class onBoard extends Exception {
-	public onBoard() {System.err.println("The position is not on the board. Please try again\n");};
-		
-	
-}
-@SuppressWarnings("serial")
-class isEmpty extends Exception {
-	public isEmpty() {System.err.println("There is no piece of yours in that position. Please try again\n");};
-		
-	
-}
-@SuppressWarnings("serial")
-class notEmpty extends Exception {
-	public notEmpty() {System.err.println("The position is already occupied. Please try again\n");};
-		
-	
-}
-@SuppressWarnings("serial")
-class illegalMove extends Exception {
-	public illegalMove() {System.err.println("The move is not allowed! Please try again\n");};
-		
-	
-}
+
 
 //Player class determines, whose turn it is, changes the turn etc.
 class Player{
 	public String Player;
-
+	/*
 	public void currentPlayer(String Player) {
 		this.Player=Player;
 		
 		
 	}
-	
+	*/
 	public String getPlayer() {
 		return Player;
 	}
@@ -73,10 +73,10 @@ class Player{
 	public void ran() {
 		double ran= Math.random();
 		ran*=2;
-		String Player;
+		//String Player;
 		if (ran<=1) Player="1";
 		else  Player="2";
-		currentPlayer(Player);
+		//Player="2";;
 		System.out.println("Player " + Player + " starts!");
 		
 		
@@ -84,9 +84,9 @@ class Player{
 	}
 	public void changePlayer() {
 		if (Player=="1") {
-			currentPlayer("2");
+			Player="2";
 		} else {
-			currentPlayer("1");
+			Player="1";//currentPlayer("1");
 		}
 		
 		
@@ -127,16 +127,16 @@ class checkerBoard{
 	}
 //Method to move piece. 
 	public void movepPiece(int x, int y, String Player) {
-		checkerBoard.checker[y][x]=Player;
+		checker[y][x]=Player;
 	}
 //Method to clear position when moved
 	public void clearPosition(int x, int y) {
-		checkerBoard.checker[y][x]=" ";
+		checker[y][x]=" ";
 	}
 //Method to check the user input. If it indeed is a current position
 //current position, it will clear the position to be ready move to new position
 //And return false in order to get out of the first while loop in main
-	public boolean currentPosition(int x, int y, String[][] checker,String Player) throws isEmpty {
+	public boolean currentPosition(int x, int y,String Player) throws isEmpty {
 
 		if (!(checker[y][x]==Player)) {
 			throw new isEmpty();
@@ -146,7 +146,7 @@ class checkerBoard{
 		}	
 	}
 //Method to check if the desired new position is a legal move
-	public boolean newPosition(int x, int y, int ox, int oy, String[][] checker, String Player)
+	public boolean newPosition(int x, int y, int ox, int oy, String Player)
 			throws notEmpty, illegalMove {
 
 		boolean bool = true;
@@ -276,7 +276,7 @@ public class checker {
 				System.out.print("Enter Y: ");
 				int y = s.nextInt();
 				p = new Position(x,y);
-				bool=board.currentPosition(p.x, p.y, checkerBoard.checker,player.getPlayer());
+				bool=board.currentPosition(p.x, p.y,player.getPlayer());
 				
 				} catch (onBoard e) {
 					
@@ -305,7 +305,7 @@ public class checker {
 
 					p = new Position(nx,ny);
 
-					bool=board.newPosition(p.x, p.y,oldx,oldy, checkerBoard.checker,player.getPlayer());
+					bool=board.newPosition(p.x, p.y,oldx,oldy,player.getPlayer());
 					
 					} catch (onBoard e) {
 						
